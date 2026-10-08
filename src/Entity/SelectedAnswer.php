@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\SelectedResponseRepository;
+use App\Repository\SelectedAnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SelectedResponseRepository::class)]
-#[ORM\Table(name: 'tbl_selected_response')]
-class SelectedResponse
+#[ORM\Entity(repositoryClass: SelectedAnswerRepository::class)]
+#[ORM\Table(name: 'tbl_selected_answer')]
+class SelectedAnswer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,11 +17,11 @@ class SelectedResponse
     #[ORM\Column(nullable: true)]
     private ?int $selected_answer_X_time = null;
 
-    #[ORM\ManyToOne(inversedBy: 'selectedResponses')]
+    #[ORM\ManyToOne(inversedBy: 'selectedAnswers')]
     private ?Statistic $statistic = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Response $response = null;
+    private ?Answer $answer = null;
 
     public function getId(): ?int
     {
@@ -52,14 +52,14 @@ class SelectedResponse
         return $this;
     }
 
-    public function getResponse(): ?Response
+    public function getAnswer(): ?Answer
     {
-        return $this->response;
+        return $this->answer;
     }
 
-    public function setResponse(?Response $response): static
+    public function setAnswer(?Answer $answer): static
     {
-        $this->response = $response;
+        $this->answer = $answer;
 
         return $this;
     }

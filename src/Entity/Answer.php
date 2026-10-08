@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ResponseRepository;
+use App\Repository\AnswerRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ResponseRepository::class)]
-#[ORM\Table(name: 'tbl_response')]
-class Response
+#[ORM\Entity(repositoryClass: AnswerRepository::class)]
+#[ORM\Table(name: 'tbl_anwser')]
+class Answer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,7 +21,7 @@ class Response
     #[ORM\Column]
     private ?bool $isRight = null;
 
-    #[ORM\ManyToOne(inversedBy: 'responses')]
+    #[ORM\ManyToOne(inversedBy: 'answers')]
     private ?Question $question = null;
 
     public function getId(): ?int
