@@ -20,21 +20,27 @@ class Question
     #[ORM\Column(type: Types::TEXT)]
     private ?string $Text = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $explication = null;
 
-    /**
-     * @var Collection<int, Response>
-     */
-    #[ORM\OneToMany(targetEntity: Response::class, mappedBy: 'question')]
-    private Collection $responses;
+
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Theme $theme = null;
 
     #[ORM\OneToOne(mappedBy: 'question', cascade: ['persist', 'remove'])]
     private ?Statistic $statistic = null;
 
+    /**
+     * @var Collection<int, Answer>
+     */
+    #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
+    private Collection $answers;
+
+
     public function __construct()
     {
-        $this->responses = new ArrayCollection();
+        $this->answers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,39 +65,22 @@ class Question
         return $this->explication;
     }
 
-    public function setExplication(string $explication): static
+    public function setExplication(?string $explication): static
     {
         $this->explication = $explication;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Response>
-     */
-    public function getResponses(): Collection
+
+    public function getTheme(): ?Theme
     {
-        return $this->responses;
+        return $this->theme;
     }
 
-    public function addResponse(Response $response): static
+    public function setTheme(?Theme $theme): static
     {
-        if (!$this->responses->contains($response)) {
-            $this->responses->add($response);
-            $response->setQuestion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResponse(Response $response): static
-    {
-        if ($this->responses->removeElement($response)) {
-            // set the owning side to null (unless already changed)
-            if ($response->getQuestion() === $this) {
-                $response->setQuestion(null);
-            }
-        }
+        $this->theme = $theme;
 
         return $this;
     }
@@ -101,15 +90,10 @@ class Question
         return $this->statistic;
     }
 
-    public function setStatistic(?Statistic $statistic): static
+    public function setStatistic(Statistic $statistic): static
     {
-        // unset the owning side of the relation if necessary
-        if ($statistic === null && $this->statistic !== null) {
-            $this->statistic->setQuestion(null);
-        }
-
         // set the owning side of the relation if necessary
-        if ($statistic !== null && $statistic->getQuestion() !== $this) {
+        if ($statistic->getQuestion() !== $this) {
             $statistic->setQuestion($this);
         }
 
@@ -117,4 +101,35 @@ class Question
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Answer>
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    public function addAnswer(Answer $answer): static
+    {
+        if (!$this->answers->contains($answer)) {
+            $this->answers->add($answer);
+            $answer->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswer(Answer $answer): static
+    {
+        if ($this->answers->removeElement($answer)) {
+            // set the owning side to null (unless already changed)
+            if ($answer->getQuestion() === $this) {
+                $answer->setQuestion(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

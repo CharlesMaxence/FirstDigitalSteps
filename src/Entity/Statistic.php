@@ -29,18 +29,19 @@ class Statistic
     #[ORM\Column(nullable: true)]
     private ?int $question_asked_X_time_ = null;
 
-    #[ORM\OneToOne(inversedBy: 'statistic', cascade: ['persist', 'remove'])]
-    private ?Question $question = null;
-
     /**
-     * @var Collection<int, SelectedResponse>
+     * @var Collection<int, SelectedAnswer>
      */
-    #[ORM\OneToMany(targetEntity: SelectedResponse::class, mappedBy: 'statistic')]
-    private Collection $selectedResponses;
+    #[ORM\OneToMany(targetEntity: SelectedAnswer::class, mappedBy: 'statistic')]
+    private Collection $selectedAnswers;
+
+    #[ORM\OneToOne(inversedBy: 'statistic', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Question $question = null;
 
     public function __construct()
     {
-        $this->selectedResponses = new ArrayCollection();
+        $this->selectedAnswers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,44 +97,44 @@ class Statistic
         return $this;
     }
 
+    /**
+     * @return Collection<int, SelectedAnswer>
+     */
+    public function getSelectedAnswers(): Collection
+    {
+        return $this->selectedAnswers;
+    }
+
+    public function addSelectedAnswer(SelectedAnswer $selectedAnswer): static
+    {
+        if (!$this->selectedAnswers->contains($selectedAnswer)) {
+            $this->selectedAnswers->add($selectedAnswer);
+            $selectedAnswer->setStatistic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSelectedAnswer(SelectedAnswer $selectedAnswer): static
+    {
+        if ($this->selectedAnswers->removeElement($selectedAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($selectedAnswer->getStatistic() === $this) {
+                $selectedAnswer->setStatistic(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getQuestion(): ?Question
     {
         return $this->question;
     }
 
-    public function setQuestion(?Question $question): static
+    public function setQuestion(Question $question): static
     {
         $this->question = $question;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SelectedResponse>
-     */
-    public function getSelectedResponses(): Collection
-    {
-        return $this->selectedResponses;
-    }
-
-    public function addSelectedResponse(SelectedResponse $selectedResponse): static
-    {
-        if (!$this->selectedResponses->contains($selectedResponse)) {
-            $this->selectedResponses->add($selectedResponse);
-            $selectedResponse->setStatistic($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSelectedResponse(SelectedResponse $selectedResponse): static
-    {
-        if ($this->selectedResponses->removeElement($selectedResponse)) {
-            // set the owning side to null (unless already changed)
-            if ($selectedResponse->getStatistic() === $this) {
-                $selectedResponse->setStatistic(null);
-            }
-        }
 
         return $this;
     }
