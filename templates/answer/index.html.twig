@@ -15,14 +15,14 @@
             </tr>
         </thead>
         <tbody>
-        {% for response in responses %}
+        {% for answer in answers %}
             <tr>
-                <td>{{ response.id }}</td>
-                <td>{{ response.text }}</td>
-                <td>{{ response.isRight ? 'Yes' : 'No' }}</td>
+                <td>{{ answer.id }}</td>
+                <td>{{ answer.text }}</td>
+                <td>{{ answer.isRight ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_response_show', {'id': response.id}) }}">show</a>
-                    <a href="{{ path('app_response_edit', {'id': response.id}) }}">edit</a>
+                    <a href="{{ path('app_answer_show', {'id': answer.id}) }}">show</a>
+                    <a href="{{ path('app_answer_edit', {'id': answer.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_response_new') }}">Create new</a>
+    <a href="{{ path('app_answer_new') }}">Create new</a>
 {% endblock %}
