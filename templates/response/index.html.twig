@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Response index{% endblock %}
+
+{% block body %}
+    <h1>Response index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Text</th>
+                <th>IsRight</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for response in responses %}
+            <tr>
+                <td>{{ response.id }}</td>
+                <td>{{ response.text }}</td>
+                <td>{{ response.isRight ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_response_show', {'id': response.id}) }}">show</a>
+                    <a href="{{ path('app_response_edit', {'id': response.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_response_new') }}">Create new</a>
+{% endblock %}
