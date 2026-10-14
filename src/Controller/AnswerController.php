@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Repository\AnswerRepository;
-use App\form\AnswerType;
+use App\Form\AnswerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
