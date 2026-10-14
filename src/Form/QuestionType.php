@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Question;
 use App\Entity\Statistic;
+use App\Entity\Theme;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,6 +20,10 @@ class QuestionType extends AbstractType
             ->add('statistic', EntityType::class, [
                 'class' => Statistic::class,
                 'choice_label' => 'id',
+            ])
+            ->add('theme', EntityType::class, [
+                'class' => Theme::class,
+                'choice_label' => 'title',
             ])
         ;
     }
