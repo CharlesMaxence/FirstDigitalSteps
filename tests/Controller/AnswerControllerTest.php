@@ -2,18 +2,18 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Response;
-use App\Repository\ResponseRepository;
+use App\Entity\Answer;
+use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ResponseControllerTest extends WebTestCase
+final class AnswerControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
-    /** @var EntityRepository<Response> $responseRepository */
+    /** @var EntityRepository<Answer> $responseRepository */
     private EntityRepository $responseRepository;
     private string $path = '/response/';
 
@@ -21,7 +21,7 @@ final class ResponseControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-        $this->responseRepository = $this->manager->getRepository(Response::class);
+        $this->responseRepository = $this->manager->getRepository(Answer::class);
 
         foreach ($this->responseRepository->findAll() as $object) {
             $this->manager->remove($object);
@@ -36,7 +36,7 @@ final class ResponseControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->path);
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Response index');
+        self::assertPageTitleContains('Answer index');
 
         // Use the $crawler to perform additional assertions e.g.
         // self::assertSame('Some text on the page', $crawler->filter('.p')->first()->text());
@@ -63,7 +63,7 @@ final class ResponseControllerTest extends WebTestCase
 
     public function testShow(): void
     {
-        $fixture = new Response();
+        $fixture = new Answer();
         $fixture->setText('My Title');
         $fixture->setIsRight('My Title');
         $fixture->setQuestion('My Title');
@@ -74,7 +74,7 @@ final class ResponseControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Response');
+        self::assertPageTitleContains('Answer');
 
         // Use assertions to check that the properties are properly displayed.
         $this->markTestIncomplete('This test was generated');
@@ -82,7 +82,7 @@ final class ResponseControllerTest extends WebTestCase
 
     public function testEdit(): void
     {
-        $fixture = new Response();
+        $fixture = new Answer();
         $fixture->setText('Value');
         $fixture->setIsRight('Value');
         $fixture->setQuestion('Value');
@@ -111,7 +111,7 @@ final class ResponseControllerTest extends WebTestCase
 
     public function testRemove(): void
     {
-        $fixture = new Response();
+        $fixture = new Answer();
         $fixture->setText('Value');
         $fixture->setIsRight('Value');
         $fixture->setQuestion('Value');
