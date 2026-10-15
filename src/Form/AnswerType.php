@@ -18,7 +18,9 @@ class AnswerType extends AbstractType
             ->add('isRight')
             ->add('question', EntityType::class, [
                 'class' => Question::class,
-                'choice_label' => 'id',
+                'choice_label' => static function (Question $question): string {
+                    return trim($question->getId() . ') ' . $question->getText());
+                },
             ])
         ;
     }
